@@ -17,7 +17,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:4200',
+        'https://blacklist-frontend.vercel.app'  // ใส่ Frontend URL ของคุณ
+    ],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
