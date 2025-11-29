@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
     origin: [
         'http://localhost:4200',
-        'https://blacklist-frontend.vercel.app'  // ใส่ Frontend URL ของคุณ
+        'http://blacklist-5d5a11npq-ayumguring093-gmailcoms-projects.vercel.app'  // ใส่ Frontend URL ของคุณ
     ],
     credentials: true
 }));
