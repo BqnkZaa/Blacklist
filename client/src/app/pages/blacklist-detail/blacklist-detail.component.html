@@ -1,0 +1,115 @@
+<div class="detail-container animate-fade-in">
+    <div *ngIf="loading" class="loading glass-panel">
+        <div class="spinner"></div>
+        <p>กำลังโหลดข้อมูล...</p>
+    </div>
+
+    <div *ngIf="!loading && blacklist" class="detail-content">
+        <!-- Header Card -->
+        <div class="detail-header glass-panel">
+            <div class="image-container">
+                <img [src]="blacklist.image_url" [alt]="blacklist.name" (error)="blacklist.image_url = ''">
+                <div class="fallback-icon" *ngIf="!blacklist.image_url" [ngClass]="blacklist.type">
+                    <span class="material-icons" *ngIf="blacklist.type === 'restaurant'">restaurant</span>
+                    <span class="material-icons" *ngIf="blacklist.type === 'hotel'">hotel</span>
+                </div>
+                <div class="type-badge" [ngClass]="blacklist.type">
+                    {{ blacklist.type === 'restaurant' ? 'ร้านอาหาร' : 'โรงแรม' }}
+                </div>
+            </div>
+
+            <div class="header-info">
+                <h1>{{ blacklist.name }}</h1>
+                <p class="address">
+                    <span class="material-icons">location_on</span>
+                    {{ blacklist.address || 'ไม่ระบุที่อยู่' }}
+                </p>
+                <div class="rating-badge">
+                    <div class="stars">
+                        <span class="material-icons active"
+                            *ngFor="let i of [].constructor(blacklist.dissatisfaction_rating)">star</span>
+                        <span class="material-icons inactive"
+                            *ngFor="let i of [].constructor(5 - blacklist.dissatisfaction_rating)">star</span>
+                    </div>
+                    <span class="score">ความไม่พอใจ {{ blacklist.dissatisfaction_rating }}/5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="detail-body glass-panel">
+            <!-- Description -->
+            <section class="description-section">
+                <h3><span class="material-icons">description</span> รายละเอียด</h3>
+                <p class="description-text">{{ blacklist.description }}</p>
+                <div class="reporter-info">
+                    <span class="material-icons">person</span>
+                    รายงานโดย: <span class="highlight">{{ blacklist.reporter?.username || 'Anonymous' }}</span>
+                </div>
+            </section>
+
+            <!-- Voting -->
+            <section class="vote-section">
+                <h3><span class="material-icons">how_to_vote</span> ความคิดเห็นชุมชน</h3>
+                <div class="vote-buttons">
+                    <button (click)="onVote('up')" [class.active]="userVote === 'up'" [disabled]="!isAuthenticated"
+                        class="vote-btn up">
+                        <span class="material-icons">thumb_up</span>
+                        <span class="count">{{ blacklist.upvotes }}</span>
+                        <span class="label">เห็นด้วย</span>
+                    </button>
+                    <button (click)="onVote('down')" [class.active]="userVote === 'down'" [disabled]="!isAuthenticated"
+                        class="vote-btn down">
+                        <span class="material-icons">thumb_down</span>
+                        <span class="count">{{ blacklist.downvotes }}</span>
+                        <span class="label">ไม่เห็นด้วย</span>
+                    </button>
+                </div>
+                <p *ngIf="!isAuthenticated" class="login-hint">เข้าสู่ระบบเพื่อโหวต</p>
+            </section>
+
+            <!-- Reviews -->
+            <section class="reviews-section">
+                <h3><span class="material-icons">comment</span> ความคิดเห็น ({{ blacklist.reviews?.length || 0 }})</h3>
+
+                <div *ngIf="isAuthenticated" class="add-review">
+                    <div class="review-input-wrapper">
+                        <textarea [(ngModel)]="newComment" placeholder="แสดงความคิดเห็นของคุณ..."></textarea>
+                        <button (click)="onAddReview()" [disabled]="!newComment.trim()">
+                            <span class="material-icons">send</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="!isAuthenticated" class="login-prompt">
+                    <span class="material-icons">lock</span>
+                    <a routerLink="/login">เข้าสู่ระบบ</a> เพื่อแสดงความคิดเห็น
+                </div>
+
+                <div class="reviews-list">
+                    <div *ngFor="let review of blacklist.reviews" class="review-item">
+                        <div class="review-avatar">
+                            {{ (review.author?.username || 'A').charAt(0).toUpperCase() }}
+                        </div>
+                        <div class="review-content">
+                            <div class="review-header">
+                                <strong>{{ review.author?.username || 'Anonymous' }}</strong>
+                                <span class="review-date">{{ review.created_at | date:'d MMM y, HH:mm' }}</span>
+                            </div>
+                            <p>{{ review.comment }}</p>
+                        </div>
+                    </div>
+                    <div *ngIf="!blacklist.reviews?.length" class="no-reviews">
+                        ยังไม่มีความคิดเห็น เป็นคนแรกที่แสดงความคิดเห็น!
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="back-link">
+            <a routerLink="/">
+                <span class="material-icons">arrow_back</span> กลับหน้าหลัก
+            </a>
+        </div>
+    </div>
+</div>

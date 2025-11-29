@@ -1,0 +1,75 @@
+<div class="report-container animate-fade-in">
+    <div class="report-card glass-panel">
+        <div class="report-header">
+            <h2>รายงานร้านปัญหา</h2>
+            <p class="subtitle">แจ้งเตือนร้านอาหาร/โรงแรมที่มีปัญหา</p>
+        </div>
+
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label>ชื่อร้าน *</label>
+                <input type="text" [(ngModel)]="name" name="name" required placeholder="ระบุชื่อร้านหรือโรงแรม">
+            </div>
+
+            <div class="form-group">
+                <label>ประเภท *</label>
+                <select [(ngModel)]="type" name="type" required>
+                    <option value="">เลือกประเภท</option>
+                    <option value="restaurant">ร้านอาหาร</option>
+                    <option value="hotel">โรงแรม</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>รายละเอียดปัญหา *</label>
+                <textarea [(ngModel)]="description" name="description" rows="5" required
+                    placeholder="เล่าประสบการณ์ที่คุณเจอ..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>ที่อยู่</label>
+                <input type="text" [(ngModel)]="address" name="address" placeholder="ระบุที่อยู่ (ถ้ามี)">
+            </div>
+
+            <div class="form-group">
+                <label>ระดับความไม่พอใจ (1-5) *</label>
+                <div class="rating-input">
+                    <input type="range" [(ngModel)]="dissatisfaction_rating" name="rating" min="1" max="5" step="1">
+                    <div class="rating-display">
+                        <span class="emoji" [ngSwitch]="dissatisfaction_rating">
+                            <span *ngSwitchCase="1">😐</span>
+                            <span *ngSwitchCase="2">😕</span>
+                            <span *ngSwitchCase="3">😠</span>
+                            <span *ngSwitchCase="4">😡</span>
+                            <span *ngSwitchCase="5">🤬</span>
+                        </span>
+                        <span class="score">{{ dissatisfaction_rating }}/5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>อัปโหลดรูปภาพ</label>
+                <div class="file-upload">
+                    <input type="file" id="file" (change)="onFileChange($event)" accept="image/*">
+                    <label for="file" class="file-label">
+                        <span class="material-icons">cloud_upload</span>
+                        <span>{{ selectedFile ? selectedFile.name : 'เลือกรูปภาพประกอบ' }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div *ngIf="error" class="error-message">
+                <span class="material-icons">error</span> {{ error }}
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="loading">
+                {{ loading ? 'กำลังบันทึก...' : 'บันทึกรายงาน' }}
+            </button>
+        </form>
+
+        <div class="back-link">
+            <a routerLink="/">← กลับหน้าหลัก</a>
+        </div>
+    </div>
+</div>

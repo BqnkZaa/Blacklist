@@ -1,0 +1,119 @@
+<div class="admin-container animate-fade-in">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar glass-panel">
+        <div class="sidebar-header">
+            <h2><span class="material-icons">admin_panel_settings</span> Admin Panel</h2>
+        </div>
+        <div class="sidebar-menu">
+            <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">
+                <span class="material-icons">people</span> จัดการผู้ใช้
+            </button>
+            <button [class.active]="activeTab === 'blacklists'" (click)="activeTab = 'blacklists'">
+                <span class="material-icons">list_alt</span> จัดการ Blacklist
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <header>
+            <h1>{{ activeTab === 'users' ? 'จัดการผู้ใช้' : 'จัดการรายการ Blacklist' }}</h1>
+            <p>ภาพรวมและเครื่องมือจัดการระบบ</p>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>ผู้ใช้ทั้งหมด</h3>
+                <div class="value">{{ stats.totalUsers | number }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>รายการ Blacklist</h3>
+                <div class="value">{{ stats.totalBlacklists | number }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>รายงานปัญหา</h3>
+                <div class="value">{{ stats.totalReports | number }}</div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div *ngIf="activeTab === 'users'" class="table-container glass-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ผู้ใช้</th>
+                        <th>อีเมล</th>
+                        <th>สถานะ</th>
+                        <th>วันที่สมัคร</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td>#{{ user.id }}</td>
+                        <td>
+                            <div class="user-cell">
+                                <span class="avatar">{{ user.username.charAt(0).toUpperCase() }}</span>
+                                {{ user.username }}
+                            </div>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="user.role">{{ user.role | titlecase }}</span>
+                        </td>
+                        <td>{{ user.created_at | date:'shortDate' }}</td>
+                        <td class="actions">
+                            <button title="แก้ไข"><span class="material-icons">edit</span></button>
+                            <button class="delete" title="ลบ"><span class="material-icons">delete</span></button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="users.length === 0">
+                        <td colspan="6" class="text-center">ไม่พบข้อมูลผู้ใช้</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Blacklist Table -->
+        <div *ngIf="activeTab === 'blacklists'" class="table-container glass-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ชื่อร้าน/โรงแรม</th>
+                        <th>ประเภท</th>
+                        <th>ผู้รายงาน</th>
+                        <th>สถานะ</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of blacklists">
+                        <td>#{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>
+                            <span class="type-badge" [ngClass]="item.type">
+                                {{ item.type === 'restaurant' ? 'ร้านอาหาร' : 'โรงแรม' }}
+                            </span>
+                        </td>
+                        <td>{{ item.reporter?.username || 'Unknown' }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="item.status">{{ item.status | titlecase }}</span>
+                        </td>
+                        <td class="actions">
+                            <button title="ดูรายละเอียด"><span class="material-icons">visibility</span></button>
+                            <button class="delete" title="ลบ" (click)="deleteBlacklist(item.id)">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="blacklists.length === 0">
+                        <td colspan="6" class="text-center">ไม่พบข้อมูล Blacklist</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

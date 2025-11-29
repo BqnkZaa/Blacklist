@@ -1,0 +1,39 @@
+<nav class="app-navbar glass-panel">
+    <div class="nav-container">
+        <a routerLink="/" class="brand-logo">
+            <span class="material-icons">verified_user</span>
+            Blacklist Check
+        </a>
+
+        <button class="menu-toggle" (click)="toggleMenu()">
+            <span class="material-icons">{{ isMenuOpen ? 'close' : 'menu' }}</span>
+        </button>
+
+        <div class="nav-links" [class.open]="isMenuOpen">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeMenu()">หน้าหลัก</a>
+
+            <ng-container *ngIf="authService.isAuthenticated()">
+                <a routerLink="/create-report" routerLinkActive="active" class="btn-report" (click)="closeMenu()">
+                    + รายงานปัญหา
+                </a>
+                <a *ngIf="authService.isAdmin()" routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">
+                    Admin Panel
+                </a>
+                <a (click)="logout()" class="btn-logout" style="cursor: pointer;">ออกจากระบบ</a>
+            </ng-container>
+
+            <ng-container *ngIf="!authService.isAuthenticated()">
+                <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">เข้าสู่ระบบ</a>
+                <a routerLink="/register" routerLinkActive="active" (click)="closeMenu()">สมัครสมาชิก</a>
+            </ng-container>
+        </div>
+    </div>
+</nav>
+
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+
+<div class="page-container">
+    <router-outlet></router-outlet>
+</div>

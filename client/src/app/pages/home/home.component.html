@@ -1,0 +1,75 @@
+<div class="home-container">
+    <header class="hero-section">
+        <h1>Restaurant & Hotel Blacklist Check</h1>
+        <p>ตรวจสอบร้านอาหารและโรงแรมที่มีรายงานปัญหา</p>
+    </header>
+
+    <section class="search-section">
+        <div class="search-bar">
+            <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()"
+                placeholder="ค้นหาชื่อร้านหรือที่อยู่...">
+            <button (click)="onSearch()">🔍 ค้นหา</button>
+        </div>
+        <div class="filter-buttons">
+            <button [class.active]="typeFilter === ''" (click)="onFilterChange('')">ทั้งหมด</button>
+            <button [class.active]="typeFilter === 'restaurant'"
+                (click)="onFilterChange('restaurant')">ร้านอาหาร</button>
+            <button [class.active]="typeFilter === 'hotel'" (click)="onFilterChange('hotel')">โรงแรม</button>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div *ngIf="loading" class="loading">กำลังโหลด...</div>
+
+        <div *ngIf="!loading && blacklists.length === 0" class="no-results">
+            ไม่พบข้อมูล
+        </div>
+
+        <div class="blacklist-grid">
+            <div *ngFor="let item of blacklists" class="blacklist-card" (click)="viewDetails(item.id)">
+                <div class="card-image">
+                    <img *ngIf="item.image_url" [src]="item.image_url" [alt]="item.name"
+                        (error)="handleImageError(item)">
+                    <div *ngIf="!item.image_url" class="fallback-icon" [ngClass]="item.type">
+                        <!-- Restaurant Icon -->
+                        <svg *ngIf="item.type === 'restaurant'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z" />
+                        </svg>
+                        <!-- Hotel Icon -->
+                        <svg *ngIf="item.type === 'hotel'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z" />
+                        </svg>
+                    </div>
+                    <span class="type-badge">{{ item.type === 'restaurant' ? 'ร้านอาหาร' : 'โรงแรม' }}</span>
+                </div>
+                <div class="card-content">
+                    <h3>{{ item.name }}</h3>
+                    <p class="address">{{ item.address || 'ไม่ระบุที่อยู่' }}</p>
+                    <div class="rating">
+                        <span class="stars">{{ '⭐'.repeat(item.dissatisfaction_rating) }}</span>
+                        <span class="rating-text">ความไม่พอใจ {{ item.dissatisfaction_rating }}/5</span>
+                    </div>
+                    <div class="votes">
+                        <span class="upvote">👍 {{ item.upvotes }}</span>
+                        <span class="downvote">👎 {{ item.downvotes }}</span>
+                    </div>
+
+                    <!-- Admin-only delete button -->
+                    <button *ngIf="authService.isAdmin()" class="delete-btn" (click)="deleteBlacklist($event, item.id)">
+                        🗑️ ลบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+        <button (click)="prevPage()" [disabled]="currentPage === 1">← ก่อนหน้า</button>
+        <span>หน้า {{ currentPage }} / {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">ถัดไป →</button>
+    </div>
+</div>

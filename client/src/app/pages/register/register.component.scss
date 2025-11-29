@@ -1,0 +1,7 @@
+@import '../login/login.component.scss';
+
+/* Inherit all styles from login component */
+.auth-card {
+    max-width: 480px;
+    /* Slightly wider for register form */
+}

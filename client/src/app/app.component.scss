@@ -1,0 +1,147 @@
+/* Navbar Styles */
+.app-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    transition: all 0.3s ease;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .brand-logo {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        text-decoration: none;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+
+        a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+
+            &:hover,
+            &.active {
+                color: var(--text-main);
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: var(--accent-mint);
+                transition: width 0.3s ease;
+                border-radius: 2px;
+            }
+
+            &:hover::after,
+            &.active::after {
+                width: 100%;
+            }
+        }
+
+        .btn-report {
+            background: var(--bg-glass-light);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            color: var(--accent-mint);
+            border: 1px solid var(--accent-mint-glow);
+
+            &:hover {
+                background: var(--accent-mint);
+                color: var(--bg-primary);
+                box-shadow: var(--shadow-glow-mint);
+
+                &::after {
+                    display: none;
+                }
+            }
+        }
+
+        .btn-logout {
+            color: var(--accent-coral);
+
+            &:hover {
+                color: #ff8787;
+
+                &::after {
+                    background: var(--accent-coral);
+                }
+            }
+        }
+    }
+}
+
+/* Mobile Menu Button (Hidden on Desktop) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .app-navbar {
+        padding: 1rem;
+
+        .menu-toggle {
+            display: block;
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: var(--bg-secondary);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(-150%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+
+            &.open {
+                transform: translateY(0);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+}
