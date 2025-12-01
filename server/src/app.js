@@ -47,6 +47,17 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Server is running' });
 });
 
+// Temporary route to trigger database migration
+app.get('/api/migrate-db', async (req, res) => {
+    try {
+        await sequelize.sync({ alter: true });
+        res.json({ status: 'OK', message: 'Database synchronized successfully' });
+    } catch (error) {
+        console.error('Migration error:', error);
+        res.status(500).json({ error: 'Migration failed: ' + error.message });
+    }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
@@ -65,7 +76,7 @@ const startServer = async () => {
         await testConnection();
 
         // Sync database (create tables if they don't exist)
-        await sequelize.sync({ alter: false });
+        await sequelize.sync({ alter: true });
         console.log('✅ Database synchronized');
 
         // Start server
