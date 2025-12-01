@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://blacklist-backend.vercel.app/api'
+    apiUrl: 'https://blacklist-tetk.vercel.app/api'
 };
