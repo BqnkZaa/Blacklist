@@ -19,6 +19,18 @@ const Blacklist = sequelize.define('Blacklist', {
         type: DataTypes.STRING(200),
         allowNull: false
     },
+    first_name: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    last_name: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    id_card_number: {
+        type: DataTypes.STRING(20),
+        allowNull: true
+    },
     type: {
         type: DataTypes.ENUM('restaurant', 'hotel'),
         allowNull: false

@@ -42,7 +42,7 @@ const upload = multer({
 // Create blacklist item (requires authentication)
 router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
     try {
-        const { name, type, description, address, latitude, longitude, dissatisfaction_rating } = req.body;
+        const { name, type, description, address, latitude, longitude, dissatisfaction_rating, first_name, last_name, id_card_number } = req.body;
 
         // Validation
         if (!name || !type || !description || !dissatisfaction_rating) {
@@ -61,6 +61,9 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
         const blacklist = await Blacklist.create({
             user_id: req.userId,
             name,
+            first_name,
+            last_name,
+            id_card_number,
             type,
             description,
             address,
@@ -104,6 +107,9 @@ router.get('/', async (req, res) => {
         if (search) {
             where[Op.or] = [
                 { name: { [Op.like]: `%${search}%` } },
+                { first_name: { [Op.like]: `%${search}%` } },
+                { last_name: { [Op.like]: `%${search}%` } },
+                { id_card_number: { [Op.like]: `%${search}%` } },
                 { address: { [Op.like]: `%${search}%` } }
             ];
         }
@@ -187,9 +193,12 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
             return res.status(403).json({ error: 'Not authorized to update this item' });
         }
 
-        const { name, type, description, address, latitude, longitude, dissatisfaction_rating } = req.body;
+        const { name, type, description, address, latitude, longitude, dissatisfaction_rating, first_name, last_name, id_card_number } = req.body;
 
         if (name) blacklist.name = name;
+        if (first_name) blacklist.first_name = first_name;
+        if (last_name) blacklist.last_name = last_name;
+        if (id_card_number) blacklist.id_card_number = id_card_number;
         if (type && ['restaurant', 'hotel'].includes(type)) blacklist.type = type;
         if (description) blacklist.description = description;
         if (address) blacklist.address = address;

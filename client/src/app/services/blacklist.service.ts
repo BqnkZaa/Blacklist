@@ -8,6 +8,9 @@ export interface BlacklistItem {
     id: number;
     user_id: number;
     name: string;
+    first_name?: string;
+    last_name?: string;
+    id_card_number?: string;
     type: 'restaurant' | 'hotel';
     description: string;
     image_url?: string;

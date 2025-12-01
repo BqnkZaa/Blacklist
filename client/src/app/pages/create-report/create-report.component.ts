@@ -14,6 +14,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CreateReportComponent {
   name = '';
+  firstName = '';
+  lastName = '';
+  idCardNumber = '';
   type = '';
   description = '';
   address = '';
@@ -53,6 +56,9 @@ export class CreateReportComponent {
     formData.append('description', this.description);
     formData.append('dissatisfaction_rating', this.dissatisfaction_rating.toString());
 
+    if (this.firstName) formData.append('first_name', this.firstName);
+    if (this.lastName) formData.append('last_name', this.lastName);
+    if (this.idCardNumber) formData.append('id_card_number', this.idCardNumber);
     if (this.address) formData.append('address', this.address);
     if (this.selectedFile) formData.append('image', this.selectedFile);
 

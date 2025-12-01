@@ -1,13 +1,13 @@
 <div class="home-container">
     <header class="hero-section">
         <h1>Restaurant & Hotel Blacklist Check</h1>
-        <p>ตรวจสอบร้านอาหารและโรงแรมที่มีรายงานปัญหา</p>
+        <p>สอบรายชื่อพนักงานที่มีรายงาน</p>
     </header>
 
     <section class="search-section">
         <div class="search-bar">
             <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()"
-                placeholder="ค้นหาชื่อร้านหรือที่อยู่...">
+                placeholder="ค้นหาชื่อร้าน, ชื่อคน, หรือเลขบัตร...">
             <button (click)="onSearch()">🔍 ค้นหา</button>
         </div>
         <div class="filter-buttons">
@@ -49,6 +49,12 @@
                 <div class="card-content">
                     <h3>{{ item.name }}</h3>
                     <p class="address">{{ item.address || 'ไม่ระบุที่อยู่' }}</p>
+                    <div *ngIf="item['first_name'] || item['last_name']" class="personal-info">
+                        <small>👤 {{ item['first_name'] }} {{ item['last_name'] }}</small>
+                    </div>
+                    <div *ngIf="item['id_card_number']" class="personal-info">
+                        <small>🆔 {{ item['id_card_number'] }}</small>
+                    </div>
                     <div class="rating">
                         <span class="stars">{{ '⭐'.repeat(item.dissatisfaction_rating) }}</span>
                         <span class="rating-text">ความไม่พอใจ {{ item.dissatisfaction_rating }}/5</span>

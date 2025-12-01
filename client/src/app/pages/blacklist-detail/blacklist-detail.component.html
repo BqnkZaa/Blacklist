@@ -24,6 +24,14 @@
                     <span class="material-icons">location_on</span>
                     {{ blacklist.address || 'ไม่ระบุที่อยู่' }}
                 </p>
+                <div *ngIf="blacklist['first_name'] || blacklist['last_name']" class="detail-row">
+                    <span class="material-icons">person</span>
+                    {{ blacklist['first_name'] }} {{ blacklist['last_name'] }}
+                </div>
+                <div *ngIf="blacklist['id_card_number']" class="detail-row">
+                    <span class="material-icons">badge</span>
+                    {{ blacklist['id_card_number'] }}
+                </div>
                 <div class="rating-badge">
                     <div class="stars">
                         <span class="material-icons active"
